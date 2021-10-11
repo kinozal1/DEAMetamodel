@@ -9,12 +9,12 @@ export enum ServiceTypeTypes {
   AEAHS = 'AEAHS',
   AEMGIS = 'AEMGIS',
   AEBUS = 'AEBUS',
-  AEMineTuck = 'AEMineTruckData',
+  AETechnicalAgent = 'AETechnicalAgentData',
   AEERP = 'AEERP',
 }
 
 export enum TopicTypes {
-  MineTruckData = 'MineTruckData',
+  TechnicalAgentData = 'TechnicalAgentData',
   MGISData = 'MGISData',
   ERPData = 'ERPData',
   AHSData = 'AHSData',

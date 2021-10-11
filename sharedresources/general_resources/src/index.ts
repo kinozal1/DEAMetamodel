@@ -8,3 +8,5 @@ export * from './lib/technicalagent.dto';
 export * from './lib/mappers';
 export * from './lib/mockdata';
 export * from './lib/message';
+export * from './lib/aemgis.dto';
+export * from './lib/aeerp.dto';

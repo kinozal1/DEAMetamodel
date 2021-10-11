@@ -1,4 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpCode, Inject, Injectable } from '@nestjs/common';
+import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 import { ClientProxy } from '@nestjs/microservices';
 import { randomInt, randomUUID } from 'crypto';
 
@@ -35,7 +36,7 @@ export class AppService implements BusService {
           x.topic == topic;
         });
         return this.services.find((x) => {
-          x.type === que.fromService;
+          x.name === que.fromService;
         });
       }
       // case MessageTypes.ReqiredData: {
@@ -47,7 +48,7 @@ export class AppService implements BusService {
   }
 
   MapData(serviceInfo: ServiceInfo, data: any) {
-    switch (serviceInfo.type) {
+    switch (serviceInfo.name) {
       case ServiceTypeTypes.AEAHS: {
         return mapToAny<typeof data, AEAHSData>(data);
       }
@@ -57,7 +58,7 @@ export class AppService implements BusService {
       case ServiceTypeTypes.AEMGIS: {
         return mapToAny<typeof data, AEAHSData>(data);
       }
-      case ServiceTypeTypes.AEMineTuck: {
+      case ServiceTypeTypes.AETechnicalAgent: {
         return mapToAny<typeof data, AEAHSData>(data);
       }
     }
@@ -95,10 +96,19 @@ export class AppService implements BusService {
       name: service.name,
       adress: service.adress,
       port: service.port,
-      type: ServiceTypeTypes[service.type as keyof typeof ServiceTypeTypes],
+      type: service.type,
+      available: true,
+      config: null,
+      instance: null,
+      quality: 100,
     } as ServiceInfo;
-    await this.services.push(serv);
-    return serv;
+    if(!this.services.find((x)=>{x.name===serv.name})){
+      await this.services.push(serv);
+      console.log(serv);
+    }
+     
+    
+    return HttpErrorByCode[409];
   }
 
   returnCommand(eventdependencies: EventDependencies) {
