@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  aebus:
+    container_name: aebus
+    hostname: "0.0.0.0"
+    build:
+      context: aebus/
+    ports:
+      - "4000:4000"
+    command: npm run start:dev
+    restart: always
+  aeahs:
+    container_name: aeahs
+    hostname: "0.0.0.0"
+    build:
+      context: aeahs/
+    ports:
+      - "4001:4001"
+    command: npm run start:dev
+    restart: always
