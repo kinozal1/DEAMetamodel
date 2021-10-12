@@ -1,7 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import axios from 'axios';
-import { RegisterService, ServiceTypeTypes } from '../../sharedresources/general_resources/build/main';
+import {
+  RegisterService,
+  ServiceTypeTypes,
+} from '../../sharedresources/general_resources/build/main';
 
 async function main() {
   global.BUS_ADDRESS = 'http://localhost:4000';
@@ -16,8 +19,8 @@ async function main() {
   } as RegisterService;
   const app = await NestFactory.create(AppModule);
   await app.listen(global.PORT, () => {
-    console.log(`AEBUS service is runnig on port ${global.PORT}`);
-    axios.post(global.BUS_ADDRESS+"/register", registerInformation);
+    console.log(`AETechnicalAgent service is runnig on port ${global.PORT}`);
+    axios.post(global.BUS_ADDRESS + '/register', registerInformation);
   });
 }
 main();

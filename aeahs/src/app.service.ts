@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   AEAHSDto,
   ServiceApiInterface,
-  MockAEAHSDTOdata
+  MockAEAHSDTOdata,
 } from '../../sharedresources/general_resources/build/main';
 const faker = require('faker');
 @Injectable()
@@ -23,12 +23,10 @@ export class AppService implements ServiceApiInterface<AEAHSDto> {
   }
   getField(id: number): AEAHSDto {
     return this.aeahsData.find((x) => {
-      x.sender.id == id;
+      x.sender.id === id;
     });
   }
   getAll(): AEAHSDto[] {
     return this.aeahsData;
   }
-
-   
 }

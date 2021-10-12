@@ -8,6 +8,8 @@ export class ServiceInfo {
   config: any;
   quality: number;
   type: ServiceTypeTypes;
+  port: number;
+  address: string;
 }
 
 export class RegisterService {
@@ -21,4 +23,10 @@ export class ServiceStatus {
   name: string;
   available: boolean;
   state: ServiceStateTypes;
+}
+
+export class AvailableData {
+  type: string;
+  count: number;
+  period: string;
 }

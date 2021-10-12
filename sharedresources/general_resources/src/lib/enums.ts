@@ -25,7 +25,8 @@ export enum MessageTypes {
   ReqiredData = 'ReqiredData',
   GetStatus = 'GetStatus',
   SetConfig = 'SetConfig',
-  GetConfig = 'GetConfig',
+  GetInConfig = 'GetInConfig',
+  GetOutConfig = 'GetOutConfig',
   Command = 'Command',
 }
 

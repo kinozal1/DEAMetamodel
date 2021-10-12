@@ -11,6 +11,11 @@ export class AEERPData {
   production_supply: number;
 }
 
-export class AEERPConfig {
+export class AEERPInConfig {
+  tech_agent_id: FieldFormat;
   production_supply: FieldFormat;
+}
+export class AEERPOutConfig {
+  tech_agent_id: FieldFormat;
+  plan: FieldFormat;
 }

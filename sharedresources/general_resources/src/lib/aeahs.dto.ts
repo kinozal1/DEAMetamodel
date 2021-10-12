@@ -12,6 +12,17 @@ export class AEAHSData {
   data: TechnicalAgentData[];
 }
 
-export class AEAHSConfig {
-  data: FieldFormat;
+export class AEAHSOutConfig {
+  tech_agent_id: FieldFormat;
+  production_supply: FieldFormat;
+  lat: FieldFormat;
+  lon: FieldFormat;
+}
+
+export class AEAHSInConfig {
+  id: FieldFormat;
+  weight: FieldFormat;
+  speedFact: FieldFormat;
+  lat: FieldFormat;
+  lon: FieldFormat;
 }

@@ -13,7 +13,7 @@ import { AppService } from './app.service';
 @Controller()
 export class AppController implements ServiceState {
   constructor(private readonly appService: AppService) {}
- 
+
   GetAllAvailableServices() {}
 
   @Post('/register')
@@ -33,16 +33,16 @@ export class AppController implements ServiceState {
   CheckQueue() {}
 
   @Post('/event')
-  AddEvent(@Body() message: Message ){
-      const eventState = this.appService.AddEventToQueue(message);
-      const availableQueue = this.appService.CheckQueue(eventState.topic, eventState.mesageType);
-      if(availableQueue!=null || undefined){
-        this.SendMessageToService(availableQueue, message.body);
-      }
+  AddEvent(@Body() message: Message) {
+    const eventState = this.appService.AddEventToQueue(message);
+    const availableService = this.appService.CheckQueue(
+      eventState.topic,
+      eventState.mesageType,
+    );
+    if (availableService != null || undefined) {
+      this.appService.SendMessageToService(availableService, message.body);
+    }
   }
 
-  SendMessageToService(service: ServiceInfo, data: any) {
-    throw new Error('Method not implemented.');
-  }
-  
+  SendMessageToService(service: ServiceInfo, data: any) {}
 }

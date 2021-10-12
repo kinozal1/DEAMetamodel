@@ -12,7 +12,7 @@ export class TechnicalAgentData {
   lon: number;
 }
 
-export class TechnicalAgentConfig {
+export class TechnicalAgentOutConfig {
   weight: FieldFormat;
   speedFact: FieldFormat;
   lat: FieldFormat;

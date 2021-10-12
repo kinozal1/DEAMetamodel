@@ -13,7 +13,12 @@ export class AEMGISData {
   lon: number;
 }
 
-export class AEMGISConfig {
+export class AEMGISInConfig {
+  tech_agent_id:FieldFormat;
   lat: FieldFormat;
   lon: FieldFormat;
+}
+export class AEMGISOutConfig {
+  enterprise_id:FieldFormat;
+  remaining_supplies: FieldFormat;
 }

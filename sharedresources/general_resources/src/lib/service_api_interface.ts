@@ -22,7 +22,8 @@ export interface BusService extends ServiceState {
 
 export interface MicroserviceApiInterface {
   GetSatus();
-  GetConfig<T>(config: T);
+  GetInConfig(config: any);
+  GetOutConfig(config: any);
   IntroduceAvailableData();
   GetData(payload: any);
   SendData();

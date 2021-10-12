@@ -1,8 +1,26 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import axios from 'axios';
+import {
+  RegisterService,
+  ServiceTypeTypes,
+} from '../../sharedresources/general_resources/build/main';
 
-async function bootstrap() {
+async function main() {
+  global.BUS_ADDRESS = 'http://localhost:4000';
+  global.PORT = 4003;
+  global.ADDRESS = 'http://localhost';
+
+  const registerInformation = {
+    name: `${ServiceTypeTypes.AEMGIS}`,
+    adress: `${global.ADDRESS}`,
+    port: global.PORT,
+    type: `${ServiceTypeTypes.AEMGIS}`,
+  } as RegisterService;
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  await app.listen(global.PORT, () => {
+    console.log(`AEMGIS service is runnig on port ${global.PORT}`);
+    axios.post(global.BUS_ADDRESS + '/register', registerInformation);
+  });
 }
-bootstrap();
+main();

@@ -1,16 +1,11 @@
-import { HttpCode, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
-import { ClientProxy } from '@nestjs/microservices';
-import { randomInt, randomUUID } from 'crypto';
+import axios from 'axios';
 
 import {
-  AEAHSConfig,
   Queue,
   RegisterService,
   ServiceInfo,
-  TechnicalAgentConfig,
-  ServiceState,
-  ServiceApiInterface,
   ServiceTypeTypes,
   EventDependencies,
   Message,
@@ -19,6 +14,9 @@ import {
   BusService,
   mapToAny,
   AEAHSData,
+  AEERPData,
+  AEMGISData,
+  TechnicalAgentData,
 } from '../../sharedresources/general_resources/build/main';
 
 @Injectable()
@@ -39,11 +37,14 @@ export class AppService implements BusService {
           x.name === que.fromService;
         });
       }
-      // case MessageTypes.ReqiredData: {
-      //   return this.publishersQueue.find((x) => {
-      //     x.topic == topic;
-      //   });
-      // }
+      case MessageTypes.ReqiredData: {
+        const que = this.publishersQueue.find((x) => {
+          x.topic == topic;
+        });
+        return this.services.find((x) => {
+          x.name === que.fromService;
+        });
+      }
     }
   }
 
@@ -53,13 +54,13 @@ export class AppService implements BusService {
         return mapToAny<typeof data, AEAHSData>(data);
       }
       case ServiceTypeTypes.AEERP: {
-        return mapToAny<typeof data, AEAHSData>(data);
+        return mapToAny<typeof data, AEERPData>(data);
       }
       case ServiceTypeTypes.AEMGIS: {
-        return mapToAny<typeof data, AEAHSData>(data);
+        return mapToAny<typeof data, AEMGISData>(data);
       }
       case ServiceTypeTypes.AETechnicalAgent: {
-        return mapToAny<typeof data, AEAHSData>(data);
+        return mapToAny<typeof data, TechnicalAgentData>(data);
       }
     }
   }
@@ -67,13 +68,18 @@ export class AppService implements BusService {
   GetDataType(serviceInfo: ServiceInfo) {}
 
   SendMessageToService(service: ServiceInfo, data: any) {
-    throw new Error('Method not implemented.');
+    
+    axios.post(`${service.address}:${service.port}`, data);
   }
   GetAllAvailableServices() {
     return this.services;
   }
 
-  async GetStatus(id: string) {}
+  async GetStatus(id: string) {
+    await this.services.find((x) => {
+      x.id.toString() === id;
+    });
+  }
 
   AddEventToQueue(message: Message) {
     const que = {
@@ -94,7 +100,7 @@ export class AppService implements BusService {
     const serv = {
       id: this.services.length + 1,
       name: service.name,
-      adress: service.adress,
+      address: service.adress,
       port: service.port,
       type: service.type,
       available: true,
@@ -102,13 +108,16 @@ export class AppService implements BusService {
       instance: null,
       quality: 100,
     } as ServiceInfo;
-    if(!this.services.find((x)=>{x.name===serv.name})){
+    const servi = this.services.find((x) => {
+      return x.name === serv.name;
+    });
+
+    if (servi === undefined || null) {
       await this.services.push(serv);
-      console.log(serv);
+      console.log(`${serv.name} has been registered on Bus!`);
+    } else {
+      return HttpErrorByCode[409];
     }
-     
-    
-    return HttpErrorByCode[409];
   }
 
   returnCommand(eventdependencies: EventDependencies) {

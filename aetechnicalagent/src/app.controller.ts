@@ -1,12 +1,16 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import {
+  AvailableData,
   MessageTypes,
   MicroserviceApiInterface,
   ServiceStateTypes,
   ServiceStatus,
   ServiceTypeTypes,
+  TechnicalAgentDto,
+  TechnicalAgentOutConfig,
 } from '../../sharedresources/general_resources/build/main';
+import { of } from 'rxjs';
 
 @Controller()
 export class AppController implements MicroserviceApiInterface {
@@ -19,17 +23,36 @@ export class AppController implements MicroserviceApiInterface {
       state: ServiceStateTypes.Normal,
     } as ServiceStatus;
   }
-  GetConfig<T>(config: T) {}
-
+  @Get(`${MessageTypes.GetInConfig}`)
+  GetInConfig<T>() {
+    return of('Config is empty');
+  }
+  @Get(`${MessageTypes.GetOutConfig}`)
+  GetOutConfig<T>() {
+    const config = {
+      lat: { limits: [0, 360], type: 'number', units: 'degrees' },
+      lon: { limits: [0, 360], type: 'number', units: 'degrees' },
+      speedFact: { limits: [0, 60], type: 'number', units: 'km/h' },
+      weight: { limits: [0, 450], type: 'number', units: 'tonns' },
+    } as TechnicalAgentOutConfig;
+    return of(config);
+  }
+  @Get(`${MessageTypes.AvailableData}`)
   IntroduceAvailableData() {
-    return;
+    return {
+      type: typeof TechnicalAgentDto,
+      count: this.appService.getAll().length,
+      period: 'today',
+    } as AvailableData;
   }
   @Post(`${MessageTypes.AvailableData}`)
   GetData(@Body() payload: any) {
+    console.log('data transmitted');
     this.appService.addField(payload);
   }
   @Get(`${MessageTypes.ReqiredData}`)
   SendData() {
+    console.log('data received');
     return this.appService.getAll();
   }
 }
