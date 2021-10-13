@@ -3,8 +3,11 @@ import { AppModule } from './app.module';
 import { Transport } from '@nestjs/microservices';
 import axios from 'axios';
 import {
+  Message,
+  MessageTypes,
   RegisterService,
   ServiceTypeTypes,
+  TopicTypes,
 } from '../../sharedresources/general_resources/build/main';
 
 async function main() {
@@ -22,6 +25,11 @@ async function main() {
   await app.listen(global.PORT, () => {
     console.log(`AEAHS service is runnig on port ${global.PORT}`);
     axios.post(global.BUS_ADDRESS + '/register', registerInformation);
+    axios.post(`${global.BUS_ADDRESS}/event`, {
+      topic: TopicTypes.TechnicalAgentData,
+      event: MessageTypes.ReqiredData,
+      sender: ServiceTypeTypes.AEAHS,
+    } as Message);
   });
 }
 main();

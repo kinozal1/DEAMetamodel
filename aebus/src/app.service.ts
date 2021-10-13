@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 import axios from 'axios';
+import { from } from 'rxjs';
 
 import {
   Queue,
@@ -28,24 +29,26 @@ export class AppService implements BusService {
   services: ServiceInfo[] = [];
 
   CheckQueue(topic: TopicTypes, messageType: MessageTypes) {
-    switch (messageType) {
-      case MessageTypes.AvailableData: {
-        const que = this.subscribersQueue.find((x) => {
-          x.topic == topic;
-        });
-        return this.services.find((x) => {
-          x.name === que.fromService;
-        });
-      }
-      case MessageTypes.ReqiredData: {
-        const que = this.publishersQueue.find((x) => {
-          x.topic == topic;
-        });
-        return this.services.find((x) => {
-          x.name === que.fromService;
-        });
-      }
-    }
+    const fromQueve = this.subscribersQueue.find((x) => {
+      return x?.topic == topic;
+    });
+
+    const toQueve = this.publishersQueue.find((x) => {
+      return x.topic == topic;
+    });
+    if (fromQueve == null || undefined || toQueve == null || undefined)
+      return { fromQueve: null, toQueve: null };
+    // return this.services.find((x) => {
+    //   return x.name === que.fromService;
+    // });
+    return {
+      fromQueve: this.services.find((x) => {
+        return x.name === fromQueve.fromService;
+      }),
+      toQueve: this.services.find((x) => {
+        return x.name === toQueve.fromService;
+      }),
+    };
   }
 
   MapData(serviceInfo: ServiceInfo, data: any) {
@@ -67,9 +70,17 @@ export class AppService implements BusService {
 
   GetDataType(serviceInfo: ServiceInfo) {}
 
-  SendMessageToService(service: ServiceInfo, data: any) {
-    
-    axios.post(`${service.address}:${service.port}`, data);
+  SendMessageToService(toService: ServiceInfo, fromService: ServiceInfo) {
+    const data = axios
+      .get(
+        `${fromService.address}:${fromService.port}/${MessageTypes.ReqiredData}`,
+      )
+      .then((dat) => {
+        axios.post(
+          `${toService.address}:${toService.port}/${MessageTypes.ReqiredData}`,
+          dat,
+        );
+      });
   }
   GetAllAvailableServices() {
     return this.services;
@@ -83,7 +94,7 @@ export class AppService implements BusService {
 
   AddEventToQueue(message: Message) {
     const que = {
-      fromService: message.sender,
+      fromService: message.sender as ServiceTypeTypes,
       topic: message.topic,
       mesageType: message.event as MessageTypes,
       message: message.body,

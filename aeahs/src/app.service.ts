@@ -15,6 +15,11 @@ export class AppService implements ServiceApiInterface<AEAHSDto> {
     this.aeahsData.push(data);
     return data;
   }
+  addFields(data: AEAHSDto[]): AEAHSDto[] {
+    this.aeahsData.push(...data);
+    console.log('Data transmitted');
+    return data;
+  }
   editField(id: number): AEAHSDto {
     return null;
   }

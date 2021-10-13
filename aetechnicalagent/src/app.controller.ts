@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import {
   AvailableData,
+  Message,
   MessageTypes,
   MicroserviceApiInterface,
   ServiceStateTypes,
@@ -9,8 +10,10 @@ import {
   ServiceTypeTypes,
   TechnicalAgentDto,
   TechnicalAgentOutConfig,
+  TopicTypes,
 } from '../../sharedresources/general_resources/build/main';
 import { of } from 'rxjs';
+import axios from 'axios';
 
 @Controller()
 export class AppController implements MicroserviceApiInterface {
@@ -54,5 +57,18 @@ export class AppController implements MicroserviceApiInterface {
   SendData() {
     console.log('data received');
     return this.appService.getAll();
+  }
+
+  //API  functions for testing
+
+  @Get('/init')
+  Init() {
+    const url = `${global.BUS_ADDRESS}/event`;
+    console.log(url);
+    axios.post(url, {
+      topic: TopicTypes.TechnicalAgentData,
+      event: MessageTypes.AvailableData,
+      sender: ServiceTypeTypes.AETechnicalAgent,
+    } as Message);
   }
 }

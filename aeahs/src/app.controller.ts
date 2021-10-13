@@ -13,6 +13,8 @@ import {
   ServiceStateTypes,
   ServiceStatus,
   AvailableData,
+  TopicTypes,
+  Message,
 } from '../../sharedresources/general_resources/build/main';
 
 @Controller()
@@ -36,9 +38,9 @@ export class AppController implements MicroserviceApiInterface {
     } as AvailableData;
   }
   @Post(`${MessageTypes.AvailableData}`)
-  GetData(payload: AEAHSDto) {
+  GetData(payload: AEAHSDto[]) {
     console.log('data transmitted');
-    return this.appService.addField(payload as AEAHSDto);
+    return this.appService.addFields(payload as AEAHSDto[]);
   }
   @Get(`${MessageTypes.ReqiredData}`)
   SendData() {
@@ -74,5 +76,14 @@ export class AppController implements MicroserviceApiInterface {
       weight: { type: 'longitude', limits: [0, 360], units: 'degrees' },
     } as AEAHSInConfig;
     return of(config);
+  }
+
+  @Get('/init')
+  Init() {
+    axios.post(`${global.BUS_ADDRESS}/event`, {
+      topic: TopicTypes.TechnicalAgentData,
+      event: MessageTypes.ReqiredData,
+      sender: ServiceTypeTypes.AEAHS,
+    } as Message);
   }
 }

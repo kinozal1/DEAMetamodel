@@ -34,13 +34,15 @@ export class AppController implements ServiceState {
 
   @Post('/event')
   AddEvent(@Body() message: Message) {
+    console.log(`Event from ${message.sender}, with ${message.topic} topic`);
     const eventState = this.appService.AddEventToQueue(message);
-    const availableService = this.appService.CheckQueue(
+    const { fromQueve, toQueve } = this.appService.CheckQueue(
       eventState.topic,
       eventState.mesageType,
     );
-    if (availableService != null || undefined) {
-      this.appService.SendMessageToService(availableService, message.body);
+    if ((fromQueve != null || undefined) && (toQueve != null || undefined)) {
+      this.appService.SendMessageToService(fromQueve, toQueve);
+      console.log(`Match found with ${fromQueve.name} and ${toQueve.name}`);
     }
   }
 
