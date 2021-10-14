@@ -18,6 +18,11 @@ import {
   AEERPData,
   AEMGISData,
   TechnicalAgentData,
+  AEAHSDto,
+  TechnicalAgentDto,
+  fromtechAgentToAhs,
+  fromMgisToErp,
+  fromAhsToMgis,
 } from '../../sharedresources/general_resources/build/main';
 
 @Injectable()
@@ -54,13 +59,16 @@ export class AppService implements BusService {
   MapData(serviceInfo: ServiceInfo, data: any) {
     switch (serviceInfo.name) {
       case ServiceTypeTypes.AEAHS: {
-        return mapToAny<typeof data, AEAHSData>(data);
+        // const outdata = (data as TechnicalAgentDto[]).map((x)=>{
+        //   return {sender:x.sender, timestamp:x.timestamp, data:{id:x.sender.id, tech_agent_id: x.sender.id, }} as AEAHSDto
+        // })
+        return fromtechAgentToAhs(data);
       }
       case ServiceTypeTypes.AEERP: {
-        return mapToAny<typeof data, AEERPData>(data);
+        return fromMgisToErp(data);
       }
       case ServiceTypeTypes.AEMGIS: {
-        return mapToAny<typeof data, AEMGISData>(data);
+        return fromAhsToMgis(data);
       }
       case ServiceTypeTypes.AETechnicalAgent: {
         return mapToAny<typeof data, TechnicalAgentData>(data);
@@ -76,9 +84,10 @@ export class AppService implements BusService {
         `${fromService.address}:${fromService.port}/${MessageTypes.ReqiredData}`,
       )
       .then((dat) => {
+        const dto = this.MapData(toService, dat.data);
         axios.post(
-          `${toService.address}:${toService.port}/${MessageTypes.ReqiredData}`,
-          dat,
+          `${toService.address}:${toService.port}/${MessageTypes.AvailableData}`,
+          dat.data,
         );
       });
   }

@@ -1,5 +1,4 @@
 export class TechnicalAgentDto {
-  id: number;
   sender: Sender;
   timestamp: string[];
   data: TechnicalAgentData[];

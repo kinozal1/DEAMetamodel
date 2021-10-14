@@ -30,6 +30,16 @@ async function main() {
       event: MessageTypes.ReqiredData,
       sender: ServiceTypeTypes.AEAHS,
     } as Message);
+    axios.post(`${global.BUS_ADDRESS}/event`, {
+      topic: TopicTypes.MGISData,
+      event: MessageTypes.AvailableData,
+      sender: ServiceTypeTypes.AEAHS,
+    } as Message);
+    axios.post(`${global.BUS_ADDRESS}/event`, {
+      topic: TopicTypes.ERPData,
+      event: MessageTypes.AvailableData,
+      sender: ServiceTypeTypes.AEAHS,
+    } as Message);
   });
 }
 main();

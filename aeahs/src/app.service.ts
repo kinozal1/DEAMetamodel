@@ -9,15 +9,18 @@ const faker = require('faker');
 export class AppService implements ServiceApiInterface<AEAHSDto> {
   constructor() {}
 
-  aeahsData: AEAHSDto[] = MockAEAHSDTOdata as unknown as AEAHSDto[];
+  aeahsData: AEAHSDto[] = [];
 
   addField(data: AEAHSDto): AEAHSDto {
     this.aeahsData.push(data);
     return data;
   }
   addFields(data: AEAHSDto[]): AEAHSDto[] {
-    this.aeahsData.push(...data);
-    console.log('Data transmitted');
+    if (data !== undefined) {
+      this.aeahsData.push(...data);
+      console.log('Data wrote');
+    }
+
     return data;
   }
   editField(id: number): AEAHSDto {
@@ -34,4 +37,6 @@ export class AppService implements ServiceApiInterface<AEAHSDto> {
   getAll(): AEAHSDto[] {
     return this.aeahsData;
   }
+
+  getAllParameterized() {}
 }

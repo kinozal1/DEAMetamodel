@@ -6,16 +6,9 @@ import { HealthCheckModule } from './health_check/health-check.module';
 import { ClientProxy, ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
-  imports: [
-    
-    HealthCheckModule,
-  ],
+  imports: [HealthCheckModule],
   controllers: [AppController, HealthCheckController],
   providers: [AppService],
-  exports: [
-    
-  ],
+  exports: [],
 })
-export class AppModule {
-  
-}
+export class AppModule {}

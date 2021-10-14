@@ -59,11 +59,13 @@ export class AppController implements MicroserviceApiInterface {
     } as AvailableData;
   }
   @Post(`${MessageTypes.AvailableData}`)
-  GetData(@Body() payload: any) {
-    this.appService.addField(payload);
+  GetData(@Body() payload: AEMGISDto[]) {
+    console.log('data transmitted');
+    this.appService.addFields(payload);
   }
   @Get(`${MessageTypes.ReqiredData}`)
   SendData() {
+    console.log('data received');
     return this.appService.getAll();
   }
 }

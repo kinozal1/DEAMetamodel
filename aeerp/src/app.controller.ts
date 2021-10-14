@@ -58,11 +58,12 @@ export class AppController implements MicroserviceApiInterface {
       period: 'today',
     };
   }
-  @Post(`${MessageTypes.ReqiredData}`)
-  GetData(payload: any) {
-    this.appService.addField(payload);
+  @Post(`${MessageTypes.AvailableData}`)
+  GetData(payload: AEERPDto[]) {
+    console.log('data transmitted');
+    this.appService.addFields(payload);
   }
-  @Get(`${MessageTypes.AvailableData}`)
+  @Get(`${MessageTypes.ReqiredData}`)
   SendData() {
     return this.appService.getAll();
   }

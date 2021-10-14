@@ -12,6 +12,12 @@ export class AppService implements ServiceApiInterface<AEERPDto> {
     this.aeerpData.push(data);
     return data;
   }
+  addFields(data: AEERPDto[]): AEERPDto[] {
+    if(data===null||undefined) return null;
+    console.log(`data wrote`)
+    this.aeerpData.push(...data);
+    return data;
+  }
   editField(id: number): AEERPDto {
     return null;
   }

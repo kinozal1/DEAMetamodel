@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import {
+  MockAEAHSDTOdata,
   ServiceApiInterface,
   TechnicalAgentDto,
 } from '../../sharedresources/general_resources/build/main';
 
 @Injectable()
 export class AppService implements ServiceApiInterface<TechnicalAgentDto> {
-  technicalAgentRepository: TechnicalAgentDto[] = [];
+  technicalAgentRepository: TechnicalAgentDto[] = JSON.parse(MockAEAHSDTOdata);
 
   addField(data: TechnicalAgentDto): TechnicalAgentDto {
     this.technicalAgentRepository.push(data);
@@ -20,7 +21,7 @@ export class AppService implements ServiceApiInterface<TechnicalAgentDto> {
   }
   getField(id: number): TechnicalAgentDto {
     return this.technicalAgentRepository.find((x) => {
-      x.id === id;
+      x.sender.id === id;
     });
   }
   getAll(): TechnicalAgentDto[] {

@@ -7,6 +7,7 @@ export class AEAHSDto {
 }
 
 export class AEAHSData {
+  x: number;
   id: number;
   tech_agent_id: number;
   data: TechnicalAgentData[];

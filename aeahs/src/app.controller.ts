@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { of } from 'rxjs';
 import { AppService } from './app.service';
@@ -38,7 +38,7 @@ export class AppController implements MicroserviceApiInterface {
     } as AvailableData;
   }
   @Post(`${MessageTypes.AvailableData}`)
-  GetData(payload: AEAHSDto[]) {
+  GetData(@Body() payload: AEAHSDto[]) {
     console.log('data transmitted');
     return this.appService.addFields(payload as AEAHSDto[]);
   }
@@ -46,6 +46,13 @@ export class AppController implements MicroserviceApiInterface {
   SendData() {
     console.log('data received');
     return this.appService.getAll();
+  }
+
+  @Get(`${MessageTypes.ReqiredData}/:servicetype`)
+  SendParamData(@Param('servicetype') servicetype: string) {
+    const val = this.appService.getAll();
+    console.log(`parametrized data received with type ${typeof val}`);
+    return val;
   }
 
   @Get(`${MessageTypes.GetOutConfig}`)
