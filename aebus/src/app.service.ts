@@ -23,6 +23,7 @@ import {
   fromtechAgentToAhs,
   fromMgisToErp,
   fromAhsToMgis,
+  AEMGISDto,
 } from '../../sharedresources/general_resources/build/main';
 
 @Injectable()
@@ -62,12 +63,16 @@ export class AppService implements BusService {
         // const outdata = (data as TechnicalAgentDto[]).map((x)=>{
         //   return {sender:x.sender, timestamp:x.timestamp, data:{id:x.sender.id, tech_agent_id: x.sender.id, }} as AEAHSDto
         // })
-        return fromtechAgentToAhs(data);
+        let dat = data as TechnicalAgentDto[];
+        return fromtechAgentToAhs(dat);
       }
       case ServiceTypeTypes.AEERP: {
-        return fromMgisToErp(data);
+        let dat = data as AEAHSDto[];
+        return fromMgisToErp(dat);
       }
       case ServiceTypeTypes.AEMGIS: {
+        let dat: AEAHSDto[] = [];
+
         return fromAhsToMgis(data);
       }
       case ServiceTypeTypes.AETechnicalAgent: {
@@ -87,7 +92,7 @@ export class AppService implements BusService {
         const dto = this.MapData(toService, dat.data);
         axios.post(
           `${toService.address}:${toService.port}/${MessageTypes.AvailableData}`,
-          dat.data,
+          dto,
         );
       });
   }

@@ -13,8 +13,8 @@ export class AppService implements ServiceApiInterface<AEERPDto> {
     return data;
   }
   addFields(data: AEERPDto[]): AEERPDto[] {
-    if(data===null||undefined) return null;
-    console.log(`data wrote`)
+    if (data === null || undefined) return null;
+    console.log(`data wrote`);
     this.aeerpData.push(...data);
     return data;
   }

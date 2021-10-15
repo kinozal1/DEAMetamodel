@@ -29,24 +29,28 @@ export function fromtechAgentToAhs(inputData: TechnicalAgentDto[]) {
 
 export function fromAhsToMgis(inputDat: AEAHSDto[]) {
   let val: AEMGISDto[] = [];
-  const inputData = inputDat as unknown as AEAHSDto;
-  inputData.data.map((x) => {
+
+  inputDat.forEach((element) => {
     let mgisdata: AEMGISData[] = [];
-    x.data.map((y) => {
-      mgisdata.push({
-        id: 100,
-        tech_agent_id: inputData.sender.id,
-        lat: y?.lat,
-        lon: y?.lon,
-      } as AEMGISData);
+
+    element.data.forEach((y) => {
+      y.data.map((c) => {
+        mgisdata.push({
+          id: 100,
+          tech_agent_id: element.sender.id,
+          lat: c?.lat,
+          lon: c?.lon,
+        } as AEMGISData);
+      });
     });
     const mapped: AEMGISDto = {
-      sender: inputData.sender,
-      timestamp: inputData.timestamp,
+      sender: element.sender,
+      timestamp: element.timestamp,
       data: mgisdata,
     };
     val.push(mapped);
   });
+
   return val;
 }
 

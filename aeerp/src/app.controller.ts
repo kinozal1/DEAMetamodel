@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { of } from 'rxjs';
 import {
   AEERPDto,
@@ -59,7 +59,7 @@ export class AppController implements MicroserviceApiInterface {
     };
   }
   @Post(`${MessageTypes.AvailableData}`)
-  GetData(payload: AEERPDto[]) {
+  GetData(@Body() payload: AEERPDto[]) {
     console.log('data transmitted');
     this.appService.addFields(payload);
   }

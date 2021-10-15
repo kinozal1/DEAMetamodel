@@ -30,7 +30,6 @@ async function main() {
       event: MessageTypes.ReqiredData,
       sender: ServiceTypeTypes.AEMGIS,
     } as Message);
-    
   });
 }
 main();
